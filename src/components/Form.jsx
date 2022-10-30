@@ -3,56 +3,72 @@ import {Formik, Form, Field} from 'formik'
 import * as Yup from "yup"
 
 const SignUpSchema = Yup.object().shape({
-    firstName: Yup.string()
-        .min(2, "Too short!")
-        .max(50, "Too long!")
-        .required("Please enter your first name!"),
-    lastName: Yup.string()
-        .min(2, "Too short!")
-        .max(50, "Too long!")
-        .required("Please enter your last name!"),
+    name: Yup.string()
+        .required("Required"),
     email: Yup.string()
-        .email("Invalid email")
-        .required("Required email")
+        .required("Required")
+        .matches(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/, "Required"),
+    phone: Yup.string()
+        .required("Required"),
+    message: Yup.string()
+        .required("Required")
 })
 
 const FormRegister = () => {
     return (
-        <div>
+        <div className='form-register'>
             <h1>Sign up</h1>
             <Formik 
                 initialValues={{
-                    firstName: "",
-                    lastName: "",
-                    email: ""
+                    name: "",
+                    email: "",
+                    phone: "",
+                    message: ""
                 }}
                 validationSchema={SignUpSchema}
                 onSubmit={values => {
-                    console.log(values)
+                    console.log('Add contact successfully!!!')
                 }}
             >
                 {({errors, touched}) => (
                     <Form>
-                        <label htmlFor="firstName">First Name</label>
-                        <Field name="firstName"/>
-                        {errors.firstName && touched.firstName && (
-                            <div>{errors.firstName}</div>
-                        )}
-                        <br></br>
+                        <div className={errors.name && touched.name && 'custom-input-error'}>
+                            <label htmlFor="name">Name</label>
+                            <Field name="name"/>
+                            {errors.name && touched.name && (
+                                <div className='error'>{errors.name}</div>
+                            )}
+                            <br></br>
+                        </div>
+                        
+                        <div className={errors.email && touched.email && 'custom-input-error'}>
+                            <label htmlFor="email">Email</label>
+                            <Field name="email" type='email'/>
+                            {errors.email && touched.email && (
+                                <div className='error'>{errors.email}</div>
+                            )}
+                            <br></br>
+                        </div>
 
-                        <label htmlFor="lastName">Last Name</label>
-                        <Field name="lastName"/>
-                        {errors.lastName && touched.lastName && (
-                            <div>{errors.lastName}</div>
-                        )}
-                        <br></br>
+                        <div className={errors.phone && touched.phone && 'custom-input-error'}>
+                            <label htmlFor="phone">Phone</label>
+                            <Field name='phone' type='number'/>
+                            {errors.phone && touched.phone && (
+                                <div className='error'>{errors.phone}</div>
+                            )}
+                            <br></br>
+                        </div>
+                        
+                        <div className={errors.message && touched.message && 'custom-input-error'}>
+                            <label htmlFor="message">Message</label>
+                            <Field name='message' type='text'/>
+                            {errors.message && touched.message && (
+                                <div className='error'>{errors.message}</div>
+                            )}
+                            <br></br>
+                        </div>
+                        
 
-                        <label htmlFor="email">Email</label>
-                        <Field name="email"/>
-                        {errors.email && touched.email && (
-                            <div>{errors.email}</div>
-                        )}
-                        <br></br>
                         <button type='submit'>Submit</button>
                     </Form>
                 )}
